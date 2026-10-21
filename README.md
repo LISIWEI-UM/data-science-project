@@ -1,7 +1,7 @@
 # Messi vs Ronaldo: how the metric changes the story
 
 An extension of my CISC7204 Practice 07 visualization, prepared for Practice 09.
-Author: **LI SIWEI** · Status: **ongoing** (source validation and peer review).
+Author: **LI SIWEI** · Status: **ongoing** (independent source validation).
 
 ## Research question
 
@@ -62,8 +62,12 @@ the accuracy of that table. Annual figures require independent match-level
 auditing before use as authoritative career statistics. Assist definitions,
 unequal career windows, minutes, league strength, roles, and competition mix
 affect interpretation. Per-appearance rates do not adjust for minutes played.
+Following peer feedback, the scope is now explicit: **dribbling is not measured,
+and penalty goals are not separated from non-penalty goals**. The selected metrics
+cannot represent every aspect of either player's performance.
 Next: cross-check annual records, resolve reuse permissions, compare a common
-time window, and add uncertainty/context rather than a single winner.
+time window, and consider dribbling and penalty/non-penalty breakdowns if reliable,
+consistently defined data become available.
 
 ## Reproduce
 
@@ -98,9 +102,9 @@ on 21 October 2026 and returned the same normalized-data hash and findings.
 
 ## Peer review
 
-Pending: ask a classmate to identify the research question, main finding, and
-limitation; record their actual feedback and commit an improvement. See
-[PEER_REVIEW.md](PEER_REVIEW.md). AI review is not classmate feedback.
+Feedback relayed by the author identified limited metric coverage. The portfolio
+and this README now explicitly discuss excluded dribbling and penalty breakdowns.
+See [PEER_REVIEW.md](PEER_REVIEW.md) for the feedback and the resulting revision.
 
 ## AI assistance
 

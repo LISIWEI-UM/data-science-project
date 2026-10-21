@@ -1,12 +1,21 @@
-# Classmate review — pending
+# Peer feedback and response
 
-Please open the portfolio and answer:
+Date: 21 October 2026. Feedback relayed by the author in the coursework discussion;
+the reviewer is not named and the comments were not collected directly by the assistant.
 
-1. What question is this project asking?
-2. What is its main finding?
-3. What is one important limitation?
-4. What should be clearer?
+## Feedback (English paraphrase)
 
-Record actual feedback here after it is received. Then implement one improvement
-and commit it with a specific message, such as `Clarify the assist definition after peer review`.
-Do not mark this step complete until it has happened.
+- Research question: comparing Messi and Ronaldo's statistics.
+- Main message: the players have different strengths when viewed from different angles.
+- Limitation: the dimensions are limited; dribbling and penalties could also matter.
+
+## Improvement
+
+The portfolio and project README now explicitly state that the analysis excludes
+dribbling metrics and does not separate penalty from non-penalty goals. They also
+explain that the current ranking cannot cover every aspect of performance.
+This addresses the limited-scope feedback without inventing additional observations.
+The next-steps paragraph now proposes these metrics subject to reliable data and
+consistent definitions. Existing charts and numerical results are unchanged.
+
+Commit message: `Clarify excluded dribbling and penalty metrics after peer feedback`.
