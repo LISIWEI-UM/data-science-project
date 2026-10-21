@@ -1,0 +1,23 @@
+{
+  "source": "https://messixronaldo.com/calendar-year-stats",
+  "window": "2002\u20132025",
+  "sha256": "bb4fff0129c81656889772206fb58e40acb6456d27db8ddec052483d47d1de3f",
+  "players": {
+    "Messi": {
+      "goals": 856,
+      "assists": 455,
+      "apps": 1096,
+      "ga": 1311,
+      "ga_per_app": 1.196,
+      "years_40_plus": 11
+    },
+    "Ronaldo": {
+      "goals": 935,
+      "assists": 305,
+      "apps": 1174,
+      "ga": 1240,
+      "ga_per_app": 1.056,
+      "years_40_plus": 14
+    }
+  }
+}
