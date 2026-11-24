@@ -5,7 +5,6 @@ Python 3.10+; Pillow is the only external dependency. No credentials required.
 import argparse
 import csv
 import hashlib
-import io
 import json
 from html.parser import HTMLParser
 from pathlib import Path
@@ -17,6 +16,11 @@ SOURCE = 'https://messixronaldo.com/calendar-year-stats'
 FIELDS = ['year', 'messi_goals', 'messi_assists', 'messi_apps',
           'ronaldo_goals', 'ronaldo_assists', 'ronaldo_apps']
 COLORS = {'Messi': '#167d9a', 'Ronaldo': '#bf562f'}
+CURRENT_HASH = '3246295a5b0970b3b2037c0dead2ab084795a8626d562fc83f65131d9e6829d8'
+SNAPSHOT_DATES = {
+    CURRENT_HASH: '2026-11-25',
+    'bb4fff0129c81656889772206fb58e40acb6456d27db8ddec052483d47d1de3f': '2026-10-21',
+}
 
 
 class TableParser(HTMLParser):
@@ -78,18 +82,18 @@ def font(size):
     return ImageFont.load_default()
 
 
-def canvas(title, subtitle):
+def canvas(title, subtitle, snapshot):
     image = Image.new('RGB', (1500, 960), '#fcfbf7')
     d = ImageDraw.Draw(image)
     d.text((80, 45), title, fill='#142a33', font=font(42))
     d.text((80, 112), subtitle, fill='#52646b', font=font(23))
-    d.text((80, 859), 'Source: messixronaldo.com/calendar-year-stats | 2002–2025 source snapshot', fill='#52646b', font=font(20))
+    d.text((80, 859), f'Source: messixronaldo.com/calendar-year-stats | 2002–2025 | Retrieved {snapshot}', fill='#52646b', font=font(20))
     d.text((80, 899), 'Descriptive source-table analysis; not independently audited career totals.', fill='#52646b', font=font(20))
     return image, d
 
 
-def charts(rows, summary):
-    image, d = canvas('Change the metric. Change the leader.', 'Totals across the source table; each player’s available years. G+A = goals + assists.')
+def charts(rows, summary, snapshot):
+    image, d = canvas('Goals, assists and combined totals', 'Totals for each player’s available years. G+A = goals + assists.', snapshot)
     left, scale = 320, 1040 / 1400
     for i, (key, label) in enumerate([('goals', 'Goals'), ('assists', 'Assists'), ('ga', 'Goals + assists')]):
         y = 218 + i * 192
@@ -100,7 +104,7 @@ def charts(rows, summary):
             d.text((left + value * scale + 14, yy + 5), str(value), fill='#142a33', font=font(23))
     d.text((320, 170), 'Messi (teal)  /  Ronaldo (orange)', fill='#142a33', font=font(22))
     image.save(ROOT / 'figures' / 'metric_comparison.png')
-    image, d = canvas('A peak and a plateau', 'Goals per calendar year; missing pre-debut Messi years are left blank.')
+    image, d = canvas('Annual goals by player', 'Goals per calendar year. The line begins with each player’s first available year.', snapshot)
     x0, y0, width, height = 115, 735, 1280, 500
     for value in (0, 20, 40, 60, 80, 100):
         y = y0 - value * height / 100
@@ -115,7 +119,12 @@ def charts(rows, summary):
     for year in (2002, 2006, 2010, 2014, 2018, 2022, 2025):
         x = x0 + (year - 2002) * width / 23
         d.text((x - 25, y0 + 15), str(year), fill='#52646b', font=font(22))
-    d.text((115, 178), 'Messi: 91 goals in 2012     |     Ronaldo: 69 goals in 2013', fill='#142a33', font=font(24))
+    peak_labels = []
+    for who in COLORS:
+        field = f'{who.lower()}_goals'
+        peak = max((r for r in rows if r[field] is not None), key=lambda r: r[field])
+        peak_labels.append(f"{who}: {peak[field]} goals in {peak['year']}")
+    d.text((115, 178), '     |     '.join(peak_labels), fill='#142a33', font=font(24))
     d.text((900, 785), 'Messi (teal) / Ronaldo (orange)', fill='#142a33', font=font(22))
     image.save(ROOT / 'figures' / 'annual_goals.png')
 
@@ -133,9 +142,9 @@ def main():
     validate(rows)
     canonical = json.dumps(rows, sort_keys=True, separators=(',', ':')).encode()
     digest = hashlib.sha256(canonical).hexdigest()
-    expected = 'bb4fff0129c81656889772206fb58e40acb6456d27db8ddec052483d47d1de3f'
-    if digest != expected:
+    if digest not in SNAPSHOT_DATES or (not args.data and digest != CURRENT_HASH):
         raise ValueError(f'Source has changed: {digest}. Review the source before updating the documented snapshot.')
+    snapshot = SNAPSHOT_DATES[digest]
     summary = {}
     for who in COLORS:
         prefix = who.lower()
@@ -146,8 +155,8 @@ def main():
         result['years_40_plus'] = sum(r[f'{prefix}_goals'] >= 40 for r in active)
         summary[who] = result
     (ROOT / 'figures').mkdir(exist_ok=True)
-    charts(rows, summary)
-    output = {'source': SOURCE, 'window': '2002–2025', 'sha256': digest, 'players': summary}
+    charts(rows, summary, snapshot)
+    output = {'source': SOURCE, 'window': '2002–2025', 'snapshot_date': snapshot, 'sha256': digest, 'players': summary}
     (ROOT / 'results.json').write_text(json.dumps(output, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(output, indent=2))
 

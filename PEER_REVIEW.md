@@ -18,4 +18,4 @@ This addresses the limited-scope feedback without inventing additional observati
 The next-steps paragraph now proposes these metrics subject to reliable data and
 consistent definitions. Existing charts and numerical results are unchanged.
 
-Commit message: `Clarify excluded dribbling and penalty metrics after peer feedback`.
+The [analysis commit](https://github.com/LISIWEI-UM/data-science-project/commit/9f4ac0b3d1672b9e8b12fb8e913a55603e6a7b85) and [portfolio commit](https://github.com/LISIWEI-UM/data-science-portfolio/commit/71cb7d7508b089c89d458b630841cd8c96437938) both record the revision on 21 October.

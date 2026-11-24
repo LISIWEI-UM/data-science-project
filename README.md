@@ -12,7 +12,7 @@ plus assists, and how do annual peaks differ from sustained scoring?
 
 - Source: [MessiXRonaldo calendar-year table](https://messixronaldo.com/calendar-year-stats).
 - Scope: 24 calendar years, 2002–2025, senior club and international statistics
-  as represented by this source. Checked against the visible table on 21 October 2026.
+  as represented by this source. The current figures use the table retrieved on 25 November 2026.
 - [Source methodology](https://messixronaldo.com/methodology) describes a broad
   historical assist definition. That definition can differ from other trackers.
 - The source is publicly readable, but an explicit open-data reuse license was
@@ -40,16 +40,16 @@ No hypothesis test, causal inference, or predictive model is claimed.
 
 | Measure | Messi | Ronaldo |
 |---|---:|---:|
-| Goals | 856 | 935 |
-| Assists | 455 | 305 |
-| Goals + assists | 1,311 | 1,240 |
-| Appearances | 1,096 | 1,174 |
-| G+A per appearance | 1.196 | 1.056 |
-| Years with at least 40 goals | 11 | 14 |
+| Goals | 855 | 935 |
+| Assists | 452 | 303 |
+| Goals + assists | 1,307 | 1,238 |
+| Appearances | 1,076 | 1,181 |
+| G+A per appearance | 1.215 | 1.048 |
+| Years with at least 40 goals | 11 | 15 |
 
-Ronaldo leads by **79 goals**, while Messi leads by **71 goals plus assists**.
+Ronaldo leads by **80 goals**, while Messi leads by **69 goals plus assists**.
 Messi's highest annual value is **91 (2012)**; Ronaldo's is **69 (2013)**.
-The lesson is about metric selection, not an objective ranking of greatness.
+The choice of metric changes which player leads.
 
 ![Goals, assists, and combined contributions compared](figures/metric_comparison.png)
 
@@ -87,7 +87,7 @@ counts, and a SHA-256 hash of normalized observations. If the source changes,
 the script stops rather than silently producing different published results.
 Review the new source before changing the expected hash or findings.
 
-If you already have a lawfully obtained local CSV matching the source snapshot:
+If you have a lawfully obtained local CSV matching either documented snapshot, run:
 
 ```sh
 python scripts/analyze.py --data path/to/calendar_year_stats.csv
@@ -95,10 +95,22 @@ python scripts/analyze.py --data path/to/calendar_year_stats.csv
 
 Schema: `year,messi_goals,messi_assists,messi_apps,ronaldo_goals,ronaldo_assists,ronaldo_apps`.
 Empty cells are missing values. The local CSV is intentionally ignored by Git.
-Expected normalized-data SHA-256:
+The default online route expects the 25 November 2026 normalized SHA-256
+`3246295a5b0970b3b2037c0dead2ab084795a8626d562fc83f65131d9e6829d8`.
+On that date the checked script fetched the table, passed this hash check and
+regenerated the published figures and totals with Python 3.10.15 and Pillow 10.4.0.
+
+### Why the October post gives different totals
+
+The source revised observations for 2022–2025 between the two retrievals.
+The twenty rows for 2002–2021 matched. The 21 October snapshot gave Ronaldo a
+79-goal lead and Messi a 71-contribution lead. The revised table gives margins
+of 80 and 69. The coverage dates and counting method are the same.
+The updated script also reproduced the October totals from a local CSV with hash
 `bb4fff0129c81656889772206fb58e40acb6456d27db8ddec052483d47d1de3f`.
-Both the local-snapshot route and live-source retrieval were executed successfully
-on 21 October 2026 and returned the same normalized-data hash and findings.
+Each run writes its snapshot date to the two figures and to `results.json`.
+The [October release](https://github.com/LISIWEI-UM/data-science-project/tree/9f4ac0b3d1672b9e8b12fb8e913a55603e6a7b85)
+preserves the original results and charts.
 
 ## Peer review
 
@@ -108,7 +120,7 @@ See [PEER_REVIEW.md](PEER_REVIEW.md) for the feedback and the resulting revision
 
 ## AI assistance
 
-GPT-6 through the Codex desktop app helped reorganize the analysis, write code,
-create charts, draft documentation, and prepare the portfolio. This extension
-builds on the earlier AI-assisted Practice 07 work. The author must review the
-outputs and the source limitations before submission.
+The October Practice 09 release used GPT-6 in Codex to reorganize the earlier
+AI-assisted Practice 07 analysis, write code, draw charts and draft the portfolio.
+For the November release, Codex compared the two source snapshots, updated the
+checks and chart annotations, reran both analysis routes and revised the documentation.
